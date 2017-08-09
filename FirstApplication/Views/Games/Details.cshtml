@@ -1,0 +1,93 @@
+﻿@model FirstApplication.Models.Game
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Game</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsMultiplayer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsMultiplayer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Genres)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Genres.Count)
+            @foreach (var item in Model.Genres)
+            {
+                <li>@Html.ActionLink(@item.Genre.Name, "Details", "Genres", new { id = item.Genre.GenreId}, null)</li>
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EditDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EditDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ratings)
+        </dt>
+
+        <dd>
+            @{ 
+                if(Model.Ratings.Count > 0)
+                {
+                    <p> The overall rating for @Model.Name is @Model.Ratings.Average(x => x.Rank)</p>
+                }
+                else
+                {
+                    <p>Be first to rate @Model.Name!</p>
+                }
+
+                using (Html.BeginForm("SetRating", "Ratings"))
+                {
+                    @Html.HiddenFor(x => x.GameId)
+                    
+                    <ul>
+                        @for (int i = 0; i<=9; i++)
+                        {
+                            <li style="list-style-type: none"><input type="radio" name="Rank" value="@i" /> @i</li>
+                        }
+                    </ul>
+
+                    <input type="submit" value="Rate!" />
+                }
+            }
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.GameId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
